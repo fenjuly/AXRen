@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/card_frame"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="5dp">
+
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/header"
+        >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="#484761"
+            app:border_width="2dp"
+            app:border_color="#ffffff"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/avatar"
+            android:text="安乡人就是这样牛"
+            android:layout_marginLeft="4dp"
+            android:id="@+id/name"
+            android:textColor="@color/nameColor"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/avatar"
+            android:layout_marginLeft="4dp"
+            android:layout_below="@+id/name"
+            android:id="@+id/time"
+            android:text="36分钟前"
+            android:textSize="10sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/time"
+            android:id="@+id/platform"
+            android:text="Android"
+            android:layout_below="@+id/name"
+            android:layout_marginLeft="10dp"
+            android:textSize="10sp"
+            />
+    </RelativeLayout>
+
+    <com.fenjuly.axren.ui.view.AisenTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text"
+        android:text="如果有一天 我老无所依\n请把我留在 在这春天里\n如果有一天 我悄然离去\n请把我埋在 在这春天里 春天里\n"
+        android:layout_below="@+id/header"
+        android:layout_marginTop="10dp"
+        />
+    <GridView
+        android:id="@+id/gridview"
+        android:layout_below="@+id/text"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:columnWidth="40dp"
+        android:horizontalSpacing="4dp"
+        android:numColumns="3"
+        android:verticalSpacing="4dp"/>
+
+    <include
+        layout="@layout/repost_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/text"
+        />
+</RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/comment_area"
+        android:layout_marginTop="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        >
+
+    <ImageView
+        android:id="@+id/star_icon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@drawable/timeline_icon_unlike"
+        />
+
+    <TextView
+        android:id="@+id/star_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/star_icon"
+        android:layout_marginLeft="3dp"
+        android:text="23"
+        android:textSize="12sp"
+        />
+
+    <TextView
+        android:id="@+id/repost_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="121"
+        android:textSize="12sp"
+        />
+
+    <ImageView
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:id="@+id/repost_icon"
+        android:src="@drawable/timeline_icon_redirect"
+        android:layout_toLeftOf="@+id/repost_count"
+        android:layout_marginRight="3dp"
+        />
+
+    <TextView
+        android:id="@+id/comment_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/repost_icon"
+        android:layout_marginRight="16dp"
+        android:text="88"
+        android:textSize="12sp"
+        />
+
+    <ImageView
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:id="@+id/comment_icon"
+        android:layout_toLeftOf="@+id/comment_count"
+        android:layout_marginRight="3dp"
+        android:src="@drawable/timeline_comment_dark"
+        />
+    </RelativeLayout>
+
+</LinearLayout>

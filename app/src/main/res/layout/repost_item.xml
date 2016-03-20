@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/repost_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+    <ImageView
+        android:id="@+id/reposticon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@drawable/timeline_repost_dark"/>
+
+        <com.fenjuly.axren.ui.view.AisenTextView
+            android:id="@+id/nameandtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/reposticon"
+            android:layout_marginLeft="5dp"
+            />
+        <GridView
+            android:id="@+id/repostgridview"
+            android:layout_below="@+id/nameandtext"
+            android:layout_toRightOf="@id/reposticon"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:columnWidth="40dp"
+            android:horizontalSpacing="4dp"
+            android:numColumns="3"
+            android:verticalSpacing="4dp"/>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="8dp"
+        android:id="@+id/repost_comment_area"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="8sp"
+        />
+
+</LinearLayout>
