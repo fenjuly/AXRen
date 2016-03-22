@@ -1,9 +1,11 @@
 package com.fenjuly.axren.model;
 
+import java.io.Serializable;
+
 /**
  * Created by liurongchan on 16/3/16.
  */
-public class Picture {
+public class Picture implements Serializable{
 
     String thumbnail_pic;
 
