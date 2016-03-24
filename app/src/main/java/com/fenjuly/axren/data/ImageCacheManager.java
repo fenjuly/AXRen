@@ -5,13 +5,16 @@ import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.fenjuly.axren.App;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import uk.co.senab.photoview.PhotoView;
 
 
 /**
@@ -41,6 +44,13 @@ public class ImageCacheManager {
 
     public static ImageLoader.ImageListener getImageListener(final ImageView view,
                                                              final Drawable defaultImageDrawable, final Drawable errorImageDrawable) {
+        return getImageListener(view, defaultImageDrawable, errorImageDrawable, null);
+    }
+
+    public static ImageLoader.ImageListener getImageListener(final ImageView view,
+                                                             final Drawable defaultImageDrawable,
+                                                             final Drawable errorImageDrawable,
+                                                             final AVLoadingIndicatorView avLoadingIndicatorView) {
         return new ImageLoader.ImageListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -68,6 +78,9 @@ public class ImageCacheManager {
                     }
                 } else if (defaultImageDrawable != null) {
                     view.setImageDrawable(defaultImageDrawable);
+                }
+                if (avLoadingIndicatorView != null) {
+//                    avLoadingIndicatorView.setVisibility(View.GONE);
                 }
             }
         };

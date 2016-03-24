@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="5dp">
+
+    <RelativeLayout
+        android:id="@+id/weibo_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/header"
+            >
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/avatar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="#484761"
+                app:border_width="2dp"
+                app:border_color="#ffffff"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/avatar"
+                android:text="安乡人就是这样牛"
+                android:layout_marginLeft="4dp"
+                android:id="@+id/name"
+                android:textColor="@color/nameColor"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/avatar"
+                android:layout_marginLeft="4dp"
+                android:layout_below="@+id/name"
+                android:id="@+id/time"
+                android:text="36分钟前"
+                android:textSize="10sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/time"
+                android:id="@+id/platform"
+                android:text="Android"
+                android:layout_below="@+id/name"
+                android:layout_marginLeft="10dp"
+                android:textSize="10sp"
+                />
+        </RelativeLayout>
+
+        <com.fenjuly.axren.ui.view.AisenTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/text"
+            android:text="如果有一天 我老无所依\n请把我留在 在这春天里\n如果有一天 我悄然离去\n请把我埋在 在这春天里 春天里\n"
+            android:layout_below="@+id/header"
+            android:layout_marginTop="10dp"
+            />
+        <GridView
+            android:id="@+id/gridview"
+            android:layout_below="@+id/text"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:columnWidth="40dp"
+            android:horizontalSpacing="4dp"
+            android:numColumns="3"
+            android:verticalSpacing="4dp"/>
+
+        <include
+            layout="@layout/repost_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/text"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/comment_area"
+        android:layout_below="@+id/weibo_area"
+        android:layout_marginTop="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        >
+        <TextView
+            android:id="@+id/weibo_detail_comment"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:text="评论 4"
+            android:textSize="12sp"
+            />
+
+        <View
+            android:background="@color/colorPrimary"
+            android:id="@+id/comment_line"
+            android:layout_width="50dp"
+            android:layout_height="2px"
+            android:layout_below="@+id/weibo_detail_comment"
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:paddingLeft="10dp"
+            android:layout_toRightOf="@+id/weibo_detail_comment"
+            android:id="@+id/weibo_detail_repost"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="转发 3"
+            android:textSize="12sp"
+            />
+        <View
+            android:background="@color/colorPrimary"
+            android:id="@+id/repost_line"
+            android:layout_width="50dp"
+            android:layout_height="2px"
+            android:layout_below="@+id/weibo_detail_repost"
+            android:layout_toRightOf="@+id/comment_line"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
+</ScrollView>

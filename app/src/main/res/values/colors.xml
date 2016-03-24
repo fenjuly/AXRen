@@ -6,5 +6,7 @@
 
     <color name="defaultPictureColor">#ffffff</color>
 
+    <color name="defaultColor">#ffffff</color>
+
     <color name="nameColor">#000000</color>
 </resources>

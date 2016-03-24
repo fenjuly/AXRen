@@ -1,6 +1,7 @@
 package com.fenjuly.axren.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -20,10 +21,12 @@ import com.fenjuly.axren.model.Picture;
 import com.fenjuly.axren.model.Status;
 import com.fenjuly.axren.model.Statuses;
 import com.fenjuly.axren.model.User;
+import com.fenjuly.axren.ui.WeiBoDetailActivity;
 import com.fenjuly.axren.ui.view.AisenTextView;
 import com.fenjuly.axren.utils.DensityUtils;
 import com.fenjuly.axren.utils.TaskUtils;
 import com.fenjuly.combinationimageview.CombinationImageView;
+import com.google.gson.Gson;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -59,7 +62,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
     }
 
     @Override
-    public void onBindViewHolder(final TimeLineHolder holder, int position) {
+    public void onBindViewHolder(final TimeLineHolder holder, final int position) {
         if (statuses != null) {
             List<Status> statusesList= statuses.getStatuses();
             if (statusesList != null) {
@@ -138,6 +141,14 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 }
             }
         }
+        holder.rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, WeiBoDetailActivity.class);
+                intent.putExtra("weibo", (new Gson()).toJson(statuses.getStatuses().get(position)));
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -163,6 +174,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
     }
 
     static class TimeLineHolder extends RecyclerView.ViewHolder {
+        View rootView;
         CircleImageView avatar;
         TextView name;
         TextView time;
@@ -179,6 +191,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         TextView repost_comment_area;
         public TimeLineHolder(View itemView) {
             super(itemView);
+            rootView = itemView;
             avatar = (CircleImageView) itemView.findViewById(R.id.avatar);
             name = (TextView) itemView.findViewById(R.id.name);
             time = (TextView) itemView.findViewById(R.id.time);

@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Parcel;
@@ -17,7 +16,6 @@ import android.view.View;
 
 import org.aisen.android.R;
 import org.aisen.android.common.utils.Logger;
-import org.aisen.android.ui.activity.basic.BaseActivity;
 import org.aisen.android.ui.widget.MToast;
 
 public class MyURLSpan extends ClickableSpan implements ParcelableSpan {
@@ -38,12 +36,20 @@ public class MyURLSpan extends ClickableSpan implements ParcelableSpan {
 		return 11;
 	}
 
+	public int getSpanTypeIdInternal() {
+		return getSpanTypeId();
+	}
+
 	public int describeContents() {
 		return 0;
 	}
 
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(mURL);
+	}
+
+	public void writeToParcelInternal(Parcel dest, int flags) {
+		writeToParcel(dest, flags);
 	}
 
 	public String getURL() {

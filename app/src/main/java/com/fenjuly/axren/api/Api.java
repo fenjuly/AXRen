@@ -23,4 +23,5 @@ public interface Api {
 
     @GET("/comments/show.json")
     Observable<Comments> getWeiBoComments(@Query("access_token") String access_token, @Query("id") String id);
+
 }
