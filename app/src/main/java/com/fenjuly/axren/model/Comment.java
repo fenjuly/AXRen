@@ -240,4 +240,16 @@ public class Comment {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "created_at='" + created_at + '\'' +
+                ", idstr='" + idstr + '\'' +
+                ", text='" + text + '\'' +
+                ", source='" + source + '\'' +
+                ", user=" + user +
+                ", status=" + status +
+                '}';
+    }
 }

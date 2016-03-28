@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#ffffff">
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
-    android:paddingTop="5dp">
+    android:paddingTop="5dp"
+    >
 
     <RelativeLayout
+        android:background="@drawable/card_frame"
+        android:id="@+id/weibo_area_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <RelativeLayout
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:id="@+id/weibo_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -87,12 +89,14 @@
         <include
             layout="@layout/repost_item"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/text"
             />
     </RelativeLayout>
 
     <RelativeLayout
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:id="@+id/comment_area"
         android:layout_below="@+id/weibo_area"
         android:layout_marginTop="12dp"
@@ -102,7 +106,7 @@
         >
         <TextView
             android:id="@+id/weibo_detail_comment"
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:text="评论 4"
@@ -121,7 +125,7 @@
             android:paddingLeft="10dp"
             android:layout_toRightOf="@+id/weibo_detail_comment"
             android:id="@+id/weibo_detail_repost"
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="转发 3"
             android:textSize="12sp"
@@ -135,6 +139,13 @@
             android:layout_toRightOf="@+id/comment_line"/>
 
     </RelativeLayout>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_below="@+id/weibo_area_card"
+        android:id="@+id/comment_and_repost"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
 </RelativeLayout>
-</ScrollView>

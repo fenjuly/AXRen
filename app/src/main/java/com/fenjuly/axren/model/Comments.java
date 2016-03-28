@@ -16,4 +16,11 @@ public class Comments {
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
+
+    @Override
+    public String toString() {
+        return "Comments{" +
+                "comments=" + comments +
+                '}';
+    }
 }

@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -21,6 +22,7 @@ import com.fenjuly.axren.data.ImageCacheManager;
 import com.fenjuly.axren.model.Status;
 import com.fenjuly.axren.model.User;
 import com.fenjuly.axren.ui.adapter.PostPictureAdapter;
+import com.fenjuly.axren.ui.fragment.CommentAndRepostFragment;
 import com.fenjuly.axren.ui.view.AisenTextView;
 import com.fenjuly.axren.utils.DensityUtils;
 import com.fenjuly.axren.utils.TaskUtils;
@@ -175,6 +177,12 @@ public class WeiBoDetailActivity extends AppCompatActivity {
                 setRetweetedInvisible();
             }
         }
+
+        switchFragment(CommentAndRepostFragment.newInstance(status.getIdstr()));
+    }
+
+    private void switchFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.comment_and_repost, fragment).commit();
     }
 
     private void commentFocused() {

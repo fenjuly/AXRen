@@ -13,6 +13,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import org.aisen.android.common.setting.SettingUtility;
 import org.aisen.android.common.utils.SdcardUtils;
+import org.aisen.android.component.bitmaploader.BitmapLoader;
 
 import java.io.File;
 
@@ -29,6 +30,7 @@ public class App extends Application {
         super.onCreate();
         sContext = getApplicationContext();
         initImageLoader(getApplicationContext());
+        BitmapLoader.newInstance(sContext, "");
     }
 
     public static Context getContext() {

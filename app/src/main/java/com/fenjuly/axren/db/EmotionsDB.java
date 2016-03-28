@@ -104,7 +104,7 @@ public class EmotionsDB {
 				public Void workInBackground(Void... params) throws TaskException {
 					InputStream in;
 					try {
-						in = GlobalContext.getInstance().getAssets().open("emotions.properties");
+						in = App.getContext().getAssets().open("emotions.properties");
 						Properties properties = new Properties();
 						properties.load(new InputStreamReader(in, "utf-8"));
 						Set<Object> keySet = properties.keySet();
@@ -118,7 +118,7 @@ public class EmotionsDB {
 
 							ContentValues values = new ContentValues();
 							values.put(EmotionTable.key, key.toString());
-							byte[] emotion = FileUtils.readStreamToBytes(GlobalContext.getInstance().getAssets().open(value));
+							byte[] emotion = FileUtils.readStreamToBytes(App.getContext().getAssets().open(value));
 							values.put(EmotionTable.value, emotion);
 							values.put(EmotionTable.file, value);
 
@@ -143,7 +143,7 @@ public class EmotionsDB {
 //		if (converter == null)
 //			converter = ZHConverter.getInstance(ZHConverter.SIMPLIFIED);
 //		key = converter.convert(key);
-
+		checkEmotions();
 		Cursor cursor = emotionsDb.rawQuery(" SELECT " + EmotionTable.value + " FROM " + EmotionTable.table + " WHERE " + EmotionTable.key + " = ? ",
 				new String[] { key });
 		

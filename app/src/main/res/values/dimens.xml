@@ -7,5 +7,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="emotion_size">18dip</dimen>
+    <dimen name="emotion_size">48dip</dimen>
+
+    <dimen name="item_space">1px</dimen>
 </resources>
