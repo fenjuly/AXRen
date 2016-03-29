@@ -82,4 +82,11 @@ public class CommentAndRepostFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putString("idstr", idstr);
     }
+
+    @Override
+    public void onResume() {
+        Log.e("commentandrepost", "onResume");
+        super.onResume();
+        loadData();
+    }
 }

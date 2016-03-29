@@ -177,12 +177,6 @@ public class AisenTextView extends TextView {
 				if (data == null)
 					continue;
 
-				boolean isNull = BitmapLoader.getInstance() == null;
-				if (isNull) {
-					Log.e("isNull", "true");
-				} else {
-					Log.e("isNull", "false");
-				}
 				MyBitmap mb = BitmapLoader.getInstance().getImageCache().getBitmapFromMemCache(key, null);
 				Bitmap b = null;
 				if (mb != null) {

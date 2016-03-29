@@ -11,12 +11,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.LinearLayout;
 
 import com.fenjuly.axren.R;
+import com.fenjuly.axren.model.Status;
 import com.fenjuly.axren.model.Statuses;
 import com.fenjuly.axren.network.RetrofitTool;
 import com.fenjuly.axren.ui.adapter.TimeLineAdapter;
+import com.fenjuly.axren.ui.listener.OnRcvScrollListener;
 import com.fenjuly.axren.utils.AccessTokenKeeper;
+import com.fenjuly.axren.utils.DensityUtils;
+import com.wang.avi.AVLoadingIndicatorView;
+
+import java.util.List;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -34,7 +42,14 @@ public class PublicTimeLineFragment extends Fragment {
     private TimeLineAdapter timeLineAdapter;
     private Context mContext;
 
+    private LinearLayout loading_part;
+    private AVLoadingIndicatorView loading;
+
     private boolean isFirstLoad = true;
+
+    private List<Status> statusList;
+
+    int page = 1;
 
     public static PublicTimeLineFragment newInstance() {
         if (publicTimeLineFragment == null) {
@@ -47,12 +62,26 @@ public class PublicTimeLineFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.content_main, container, false);
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.srlayout);
         mContext = getActivity();
         timeline = (RecyclerView) rootView.findViewById(R.id.timeline);
         timeline.setLayoutManager(new LinearLayoutManager(mContext));
+
+        loading_part = (LinearLayout) rootView.findViewById(R.id.loading_part);
+        loading = (AVLoadingIndicatorView) rootView.findViewById(R.id.loading);
+
+        timeline.setOnScrollListener(new OnRcvScrollListener(){
+            @Override
+            public void onBottom() {
+                super.onBottom();
+                timeline.setTranslationY(0 - DensityUtils.dip2px(getActivity(), 60));
+                loading_part.setVisibility(View.VISIBLE);
+                loading.setVisibility(View.VISIBLE);
+                loadData();
+            }
+        });
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -61,16 +90,18 @@ public class PublicTimeLineFragment extends Fragment {
             }
         });
 
-        loadData();
+        loadFromTop();
         return rootView;
     }
 
     private void refresh() {
+        page = 1;
+        statusList.clear();
         mSwipeRefreshLayout.setRefreshing(true);
-        loadData();
+        loadFromTop();
     }
 
-    private void loadData() {
+    private void loadFromTop() {
         if (isFirstLoad) {
             mSwipeRefreshLayout.post(new Runnable() {
                 @Override
@@ -81,7 +112,11 @@ public class PublicTimeLineFragment extends Fragment {
         } else {
             mSwipeRefreshLayout.setRefreshing(true);
         }
-        RetrofitTool.getInstance().getTimeLine(AccessTokenKeeper.readAccessToken(mContext).getToken())
+        loadData();
+    }
+
+    private void loadData() {
+        RetrofitTool.getInstance().getTimeLine(AccessTokenKeeper.readAccessToken(mContext).getToken(), page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Statuses>() {
@@ -106,9 +141,23 @@ public class PublicTimeLineFragment extends Fragment {
 
                     @Override
                     public void onNext(Statuses statuses) {
-                        timeLineAdapter = new TimeLineAdapter(statuses, mContext);
-                        timeline.setAdapter(timeLineAdapter);
-                        mSwipeRefreshLayout.setRefreshing(false);
+                        if (page == 1) {
+                            if (statuses != null) {
+                                statusList = statuses.getStatuses();
+                            }
+                            timeLineAdapter = new TimeLineAdapter(statusList, mContext);
+                            timeline.setAdapter(timeLineAdapter);
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        } else {
+                            if (statuses != null) {
+                                statusList.addAll(statuses.getStatuses());
+                            }
+                            timeLineAdapter.refresh(statusList);
+                        }
+                        page++;
+                        timeline.setTranslationY(0);
+                        loading_part.setVisibility(View.GONE);
+                        loading.setVisibility(View.GONE);
                     }
                 });
     }

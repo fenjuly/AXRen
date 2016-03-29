@@ -27,6 +27,7 @@ import com.fenjuly.axren.utils.DensityUtils;
 import com.fenjuly.axren.utils.TaskUtils;
 import com.fenjuly.combinationimageview.CombinationImageView;
 import com.google.gson.Gson;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,14 +45,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLineHolder> {
 
-    private Statuses statuses;
+    private List<Status> statuses;
     private Context mContext;
 
     private Drawable mDefaultImageDrawable;
 
     private static final int AVATAR_MAX_HEIGHT = 40;
 
-    public TimeLineAdapter(Statuses statuses, Context mContext) {
+    public TimeLineAdapter(List<Status> statuses, Context mContext) {
         this.statuses = statuses;
         this.mContext = mContext;
     }
@@ -61,12 +62,15 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         return new TimeLineHolder(LayoutInflater.from(mContext).inflate(R.layout.timeline_item, parent, false));
     }
 
+    public void refresh(List<Status> statuses) {
+        this.statuses = statuses;
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(final TimeLineHolder holder, final int position) {
-        if (statuses != null) {
-            List<Status> statusesList= statuses.getStatuses();
-            if (statusesList != null) {
-                final Status status = statusesList.get(position);
+            if (statuses != null) {
+                final Status status = statuses.get(position);
                 if (status != null) {
                     holder.star.setText(status.getAttitudes_count());
                     holder.comment.setText(status.getComments_count());
@@ -140,12 +144,11 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                     }
                 }
             }
-        }
         holder.rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, WeiBoDetailActivity.class);
-                intent.putExtra("weibo", (new Gson()).toJson(statuses.getStatuses().get(position)));
+                intent.putExtra("weibo", (new Gson()).toJson(statuses.get(position)));
                 mContext.startActivity(intent);
             }
         });
@@ -153,8 +156,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
     @Override
     public int getItemCount() {
-        if (statuses != null && statuses.getStatuses() != null) {
-            return statuses.getStatuses().size();
+        if (statuses != null) {
+            return statuses.size();
         }
         return 0;
     }

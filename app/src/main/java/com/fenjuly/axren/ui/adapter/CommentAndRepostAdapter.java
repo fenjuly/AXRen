@@ -1,6 +1,7 @@
 package com.fenjuly.axren.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -17,7 +18,10 @@ import android.widget.TextView;
 import com.fenjuly.axren.R;
 import com.fenjuly.axren.data.ImageCacheManager;
 import com.fenjuly.axren.model.Comment;
+import com.fenjuly.axren.model.Status;
 import com.fenjuly.axren.model.User;
+import com.fenjuly.axren.ui.CommentActivity;
+import com.fenjuly.axren.ui.CommentReplyActivity;
 import com.fenjuly.axren.ui.view.AisenTextView;
 import com.fenjuly.axren.utils.DensityUtils;
 import com.fenjuly.axren.utils.TaskUtils;
@@ -69,8 +73,13 @@ public class CommentAndRepostAdapter extends RecyclerView.Adapter<CommentAndRepo
                             public boolean onMenuItemClick(MenuItem item) {
                                 switch (item.getItemId()){
                                     case R.id.comment:
-                                        Snackbar.make(v, "评论成功", Snackbar.LENGTH_LONG)
-                                                .setAction("Action", null).show();
+                                        Intent intent = new Intent(mContext, CommentReplyActivity.class);
+                                        Status status =comment.getStatus();
+                                        if (status != null) {
+                                            intent.putExtra("id", status.getIdstr());
+                                        }
+                                        intent.putExtra("cid", comment.getIdstr());
+                                        mContext.startActivity(intent);
                                         break;
                                     case R.id.repost:
                                         Snackbar.make(v, "转发成功", Snackbar.LENGTH_LONG)

@@ -8,4 +8,7 @@
 
     <string name="action_repost">转发</string>
     <string name="action_comment">评论</string>
+
+    <string name="emotion">表情</string>
+    <string name="send">发送</string>
 </resources>

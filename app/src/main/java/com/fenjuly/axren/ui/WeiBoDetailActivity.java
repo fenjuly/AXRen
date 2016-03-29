@@ -7,10 +7,13 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -74,6 +77,11 @@ public class WeiBoDetailActivity extends AppCompatActivity {
             status = new Gson().fromJson(intent.getStringExtra("weibo"), Status.class);
         }
 
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         Log.e("status", status.toString());
         avatar = (CircleImageView) findViewById(R.id.avatar);
         name = (TextView) findViewById(R.id.name);
@@ -110,75 +118,79 @@ public class WeiBoDetailActivity extends AppCompatActivity {
                 }
             });
 
-            TaskUtils.executeAsyncTask(new AsyncTask<Void, Void, List<String>>() {
-                @Override
-                protected List<String> doInBackground(Void... params) {
-                    List<String> timeandplatform = new ArrayList<>();
-                    try {
-                        String stringDate = status.getCreated_at();
-                        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM ddHH:mm:ss Z yyyy", Locale.US);
-                        Date date =sdf.parse(stringDate);
-                        sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        timeandplatform.add(sdf.format(date));
-                        String  str = status.getSource();
-                        Pattern p = Pattern.compile("<a[^>]*>(.*?)</a>");
-                        Matcher m = p.matcher(str);
-                        while(m.find()) {
-                            timeandplatform.add(m.group(1));
-                        }
-
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    return timeandplatform;
-                }
-
-                @Override
-                protected void onPostExecute(List<String> strings) {
-                    super.onPostExecute(strings);
-                    time.setText(strings.get(0));
-                    if (strings.size() > 1) {
-                        platform.setText(strings.get(1));
-                    }
-                }
-            });
-
-
-            User user = status.getUser();
-            if (user != null) {
-                name.setText(user.getName());
-                mDefaultImageDrawable = new ColorDrawable(this.getResources().getColor(R.color.colorPrimary));
-                ImageCacheManager.loadImage(user.getAvatar_large(), ImageCacheManager
-                        .getImageListener(avatar, mDefaultImageDrawable, mDefaultImageDrawable), 0, DensityUtils.dip2px(this, 40));
-            }
-            text.setContent(status.getText());
-            if (status.getPic_urls() != null) {
-                gridview.setAdapter(new PostPictureAdapter(this, status.getPic_urls()));
-                gridview.setVisibility(View.VISIBLE);
-                setRetweetedInvisible();
-            } else {
-                gridview.setVisibility(View.GONE);
-            }
-
-            if (status.getRetweeted_status() != null) {
-                Status retweeted_status = status.getRetweeted_status();
-                repost_comment_area.setText(retweeted_status.getAttitudes_count() + "赞 | " +
-                        retweeted_status.getComments_count() + "评论 | " + retweeted_status.getReposts_count() + "转发");
-                User retweeted_user = retweeted_status.getUser();
-                if (retweeted_user != null) {
-                    nameandtext.setContent("@" + retweeted_user.getName() + ": " + retweeted_status.getText());
-                }
-                if (retweeted_status.getPic_urls() != null) {
-                    repostgridview.setAdapter(new PostPictureAdapter(this, retweeted_status.getPic_urls()));
-                }
-                setRetweetedVisible();
-                gridview.setVisibility(View.GONE);
-            } else {
-                setRetweetedInvisible();
-            }
+            loadData();
         }
 
         switchFragment(CommentAndRepostFragment.newInstance(status.getIdstr()));
+    }
+
+    private void loadData() {
+        TaskUtils.executeAsyncTask(new AsyncTask<Void, Void, List<String>>() {
+            @Override
+            protected List<String> doInBackground(Void... params) {
+                List<String> timeandplatform = new ArrayList<>();
+                try {
+                    String stringDate = status.getCreated_at();
+                    SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM ddHH:mm:ss Z yyyy", Locale.US);
+                    Date date =sdf.parse(stringDate);
+                    sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    timeandplatform.add(sdf.format(date));
+                    String  str = status.getSource();
+                    Pattern p = Pattern.compile("<a[^>]*>(.*?)</a>");
+                    Matcher m = p.matcher(str);
+                    while(m.find()) {
+                        timeandplatform.add(m.group(1));
+                    }
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return timeandplatform;
+            }
+
+            @Override
+            protected void onPostExecute(List<String> strings) {
+                super.onPostExecute(strings);
+                time.setText(strings.get(0));
+                if (strings.size() > 1) {
+                    platform.setText(strings.get(1));
+                }
+            }
+        });
+
+
+        User user = status.getUser();
+        if (user != null) {
+            name.setText(user.getName());
+            mDefaultImageDrawable = new ColorDrawable(this.getResources().getColor(R.color.colorPrimary));
+            ImageCacheManager.loadImage(user.getAvatar_large(), ImageCacheManager
+                    .getImageListener(avatar, mDefaultImageDrawable, mDefaultImageDrawable), 0, DensityUtils.dip2px(this, 40));
+        }
+        text.setContent(status.getText());
+        if (status.getPic_urls() != null) {
+            gridview.setAdapter(new PostPictureAdapter(this, status.getPic_urls()));
+            gridview.setVisibility(View.VISIBLE);
+            setRetweetedInvisible();
+        } else {
+            gridview.setVisibility(View.GONE);
+        }
+
+        if (status.getRetweeted_status() != null) {
+            Status retweeted_status = status.getRetweeted_status();
+            repost_comment_area.setText(retweeted_status.getAttitudes_count() + "赞 | " +
+                    retweeted_status.getComments_count() + "评论 | " + retweeted_status.getReposts_count() + "转发");
+            User retweeted_user = retweeted_status.getUser();
+            if (retweeted_user != null) {
+                nameandtext.setContent("@" + retweeted_user.getName() + ": " + retweeted_status.getText());
+            }
+            if (retweeted_status.getPic_urls() != null) {
+                repostgridview.setAdapter(new PostPictureAdapter(this, retweeted_status.getPic_urls()));
+            }
+            setRetweetedVisible();
+            gridview.setVisibility(View.GONE);
+        } else {
+            setRetweetedInvisible();
+        }
     }
 
     private void switchFragment(Fragment fragment) {
@@ -218,4 +230,30 @@ public class WeiBoDetailActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.weibo_detail, menu);
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_comment:
+                Intent intent = new Intent(this, CommentActivity.class);
+                intent.putExtra("id", status.getIdstr());
+                startActivity(intent);
+                break;
+            case android.R.id.home:
+                finish();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e("weiBoDetail", "onResume");
+        loadData();
+    }
+
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <EditText
+        android:padding="8dp"
+        android:id="@+id/comment_text"
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+        android:layout_above="@+id/send_and_emotion"
+        android:background="@color/defaultColor"
+        android:gravity="top|left"
+        android:hint="写下你的评论..."
+        />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="同时转发到微博"
+        android:id="@+id/checkBox"
+        android:layout_above="@+id/send_and_emotion"
+        android:layout_marginBottom="10dp" />
+
+    <RelativeLayout
+        android:id="@+id/send_and_emotion"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <ImageView
+            android:id="@+id/emotion"
+            android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/emotion"
+            />
+
+        <ImageView
+            android:id="@+id/send"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/send"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            />
+    </RelativeLayout>
+
+    <GridView
+        android:visibility="gone"
+        android:id="@+id/reply_comment_gridview"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:columnWidth="48dp"
+        android:numColumns="8" />
+
+</RelativeLayout>

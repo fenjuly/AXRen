@@ -48,7 +48,7 @@ public class App extends Application {
     }
 
     public static String getAppPath() {
-        return SdcardUtils.getSdcardPath() + File.separator + SettingUtility.getStringSetting("root_path") + File.separator;
+        return SdcardUtils.getSdcardPath() + File.separator + "AXRen" + File.separator;
     }
 
 }

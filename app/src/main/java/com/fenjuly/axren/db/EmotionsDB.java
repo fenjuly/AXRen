@@ -3,6 +3,7 @@ package com.fenjuly.axren.db;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.fenjuly.axren.App;
 import com.fenjuly.axren.model.emotion.Emotion;
@@ -32,7 +33,7 @@ public class EmotionsDB {
 
 	// 创建表情库
 	static {
-		String path = App.getAppPath() + File.separator + "emotions_v5.db";
+		String path = App.getAppPath()  + "emotions_v5.db";
 		File dbf = new File(path);
 		if (!dbf.exists()) {
 			Logger.w(TAG, "新建表情DB");
@@ -40,7 +41,13 @@ public class EmotionsDB {
 			try {
 				if (dbf.createNewFile())
 					emotionsDb = SQLiteDatabase.openOrCreateDatabase(dbf, null);
+				if (emotionsDb == null) {
+					System.out.print("null");
+				} else {
+					System.out.print("not null");
+				}
 			} catch (IOException ioex) {
+				ioex.printStackTrace();
 			}
 		} else {
 			Logger.w(TAG, "表情DB已存在");
@@ -50,6 +57,7 @@ public class EmotionsDB {
 
 	public static void checkEmotions() {
 		Cursor cursor = null;
+
 
 		// 检查表是否存在
 		boolean tableExist = false;
