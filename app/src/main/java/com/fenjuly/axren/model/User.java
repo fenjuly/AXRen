@@ -68,7 +68,7 @@ public class User {
     boolean following;
     String avatar_large;
     String avatar_hd;
-    String follow_me;
+    boolean follow_me;
 
     public String getIdstr() {
         return idstr;
@@ -134,7 +134,7 @@ public class User {
         this.statuses_count = statuses_count;
     }
 
-    public boolean isFollowing() {
+    public boolean getFollowing() {
         return following;
     }
 
@@ -158,11 +158,11 @@ public class User {
         this.avatar_hd = avatar_hd;
     }
 
-    public String getFollow_me() {
+    public boolean getFollow_me() {
         return follow_me;
     }
 
-    public void setFollow_me(String follow_me) {
+    public void setFollow_me(boolean follow_me) {
         this.follow_me = follow_me;
     }
 

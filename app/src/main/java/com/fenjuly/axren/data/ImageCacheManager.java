@@ -116,6 +116,12 @@ public class ImageCacheManager {
                 } else if (defaultImageDrawable != null) {
                     view.setImageDrawable(defaultImageDrawable);
                 }
+                view.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.postInvalidate();
+                    }
+                });
             }
         };
     }

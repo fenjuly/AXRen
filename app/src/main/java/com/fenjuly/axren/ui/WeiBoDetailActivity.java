@@ -241,6 +241,11 @@ public class WeiBoDetailActivity extends AppCompatActivity {
                 intent.putExtra("id", status.getIdstr());
                 startActivity(intent);
                 break;
+            case R.id.action_repost:
+                Intent t = new Intent(this, RepostActivity.class);
+                t.putExtra("id", status.getIdstr());
+                startActivity(t);
+                break;
             case android.R.id.home:
                 finish();
                 break;

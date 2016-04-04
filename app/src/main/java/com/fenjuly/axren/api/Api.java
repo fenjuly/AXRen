@@ -3,7 +3,10 @@ package com.fenjuly.axren.api;
 import com.fenjuly.axren.model.Comment;
 import com.fenjuly.axren.model.Comments;
 import com.fenjuly.axren.model.PublicStatuses;
+import com.fenjuly.axren.model.Status;
 import com.fenjuly.axren.model.Statuses;
+import com.fenjuly.axren.model.User;
+import com.fenjuly.axren.model.Users;
 
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
@@ -39,4 +42,17 @@ public interface Api {
                                      @Field("id") String id, @Field("comment") String comment,
                                      @Field("comment_ori") int comment_ori);
 
+    @FormUrlEncoded
+    @POST("/statuses/repost.json")
+    Observable<Status> repostWeiBo(@Field("access_token") String access_token, @Field("id") String id,
+                                   @Field("status") String status, @Field("is_comment") int is_comment);
+
+    @GET("/users/show.json")
+    Observable<User> getUserProfile(@Query("access_token") String access_token, @Query("uid") String uid,
+                                    @Query("screen_name") String screen_name);
+
+    @GET("/users/show.json")
+    Observable<User> getUserProfile(@Query("access_token") String access_token, @Query("uid") String uid);
+
+    Observable<Users> getFansCount(@Query("access_token") String access_token, @Query("uid") String uid);
 }

@@ -32,9 +32,15 @@
         <activity android:name=".ui.PhotoActivity"/>
         <activity android:name=".ui.WeiBoDetailActivity"/>
         <activity android:name=".ui.CommentActivity"
-                  android:windowSoftInputMode="stateVisible|adjustResize"/>
+            android:windowSoftInputMode="stateVisible|adjustResize"/>
         <activity android:name=".ui.CommentReplyActivity"
-                  android:windowSoftInputMode="stateVisible|adjustResize"/>
+            android:windowSoftInputMode="stateVisible|adjustResize"/>
+        <activity android:name=".ui.RepostActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"/>
+        <activity android:name=".ui.ProfileActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
 
         <!-- 必须注册在微博授权，分享微博时候用到 -->
         <activity android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"

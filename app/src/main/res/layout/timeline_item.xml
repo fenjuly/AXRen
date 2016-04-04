@@ -24,7 +24,6 @@
             android:id="@+id/avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="#484761"
             app:border_width="2dp"
             app:border_color="#ffffff"
             android:layout_alignParentLeft="true"
