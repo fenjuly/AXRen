@@ -54,5 +54,6 @@ public interface Api {
     @GET("/users/show.json")
     Observable<User> getUserProfile(@Query("access_token") String access_token, @Query("uid") String uid);
 
+    @GET("/friendships/followers.json")
     Observable<Users> getFansCount(@Query("access_token") String access_token, @Query("uid") String uid);
 }

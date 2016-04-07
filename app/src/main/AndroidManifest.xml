@@ -41,6 +41,7 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity android:name=".ui.FansActivity"/>
 
         <!-- 必须注册在微博授权，分享微博时候用到 -->
         <activity android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"

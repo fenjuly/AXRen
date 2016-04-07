@@ -1,6 +1,7 @@
 package com.fenjuly.axren.ui;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -31,6 +32,8 @@ import rx.schedulers.Schedulers;
  */
 public class ProfileActivity extends AppCompatActivity {
 
+    String id;
+
     CircleImageView imageView;
     TextView name;
     TextView place;
@@ -45,6 +48,10 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_activity);
+        Intent intent = getIntent();
+        if (intent != null) {
+            id = intent.getStringExtra("id");
+        }
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -74,11 +81,18 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         loadUserProfile();
+        fans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, FansActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void loadUserProfile() {
         progressDialog = ProgressDialog.show(this, "系统提示", "正在加载，请稍后...");
-        RetrofitTool.getInstance().getUserProfile(AccessTokenKeeper.readAccessToken(this).getToken(), AccessTokenKeeper.readAccessToken(this).getUid())
+        RetrofitTool.getInstance().getUserProfile(AccessTokenKeeper.readAccessToken(this).getToken(), id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<User>() {

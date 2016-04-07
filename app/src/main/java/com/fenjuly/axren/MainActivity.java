@@ -19,6 +19,7 @@ import android.widget.ImageView;
 
 import com.fenjuly.axren.ui.ProfileActivity;
 import com.fenjuly.axren.ui.fragment.PublicTimeLineFragment;
+import com.fenjuly.axren.utils.AccessTokenKeeper;
 
 
 public class MainActivity extends AppCompatActivity
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                intent.putExtra("id", AccessTokenKeeper.readAccessToken(MainActivity.this).getUid());
                 startActivity(intent);
             }
         });
