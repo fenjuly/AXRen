@@ -2,6 +2,7 @@ package com.fenjuly.axren.ui;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -57,6 +58,8 @@ public class RepostActivity extends AppCompatActivity implements EmotionAdapter.
 
     List<String> emotion_names;
 
+    ProgressDialog progressDialog;
+
     boolean isUp = false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +67,7 @@ public class RepostActivity extends AppCompatActivity implements EmotionAdapter.
         setContentView(R.layout.respost_activity);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle("评论微博");
+            actionBar.setTitle("转发微博");
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
@@ -154,6 +157,7 @@ public class RepostActivity extends AppCompatActivity implements EmotionAdapter.
     }
 
     private void sendComment() {
+        progressDialog = ProgressDialog.show(this, "系统提示", "转发微博中...");
         String content = comment_text.getText().toString();
         if (content.equals("")) {
             Snackbar.make(comment_text, "内容为空", Snackbar.LENGTH_LONG)
@@ -169,6 +173,7 @@ public class RepostActivity extends AppCompatActivity implements EmotionAdapter.
                     .subscribe(new Subscriber<Status>() {
                         @Override
                         public void onCompleted() {
+                            progressDialog.dismiss();
                             Log.e("commentActivity", "onCompleted");
                             finish();
                         }

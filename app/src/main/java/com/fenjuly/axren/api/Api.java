@@ -56,4 +56,14 @@ public interface Api {
 
     @GET("/friendships/followers.json")
     Observable<Users> getFansCount(@Query("access_token") String access_token, @Query("uid") String uid);
+
+    @GET("/friendships/friends.json")
+    Observable<Users> getFocusCount(@Query("access_token") String access_token, @Query("uid") String uid);
+
+    @GET("/statuses/user_timeline.json")
+    Observable<Statuses> getMyWeiBos(@Query("access_token") String access_token, @Query("uid") String uid);
+
+    @FormUrlEncoded
+    @POST("/statuses/update.json")
+    Observable<Status> postWeiBo(@Field("access_token") String access_token, @Field("status") String status);
 }

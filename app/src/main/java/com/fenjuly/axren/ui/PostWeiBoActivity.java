@@ -3,7 +3,6 @@ package com.fenjuly.axren.ui;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -21,7 +19,7 @@ import android.widget.RelativeLayout;
 
 import com.fenjuly.axren.App;
 import com.fenjuly.axren.R;
-import com.fenjuly.axren.model.Comment;
+import com.fenjuly.axren.model.Status;
 import com.fenjuly.axren.network.RetrofitTool;
 import com.fenjuly.axren.ui.adapter.EmotionAdapter;
 import com.fenjuly.axren.utils.AccessTokenKeeper;
@@ -41,19 +39,16 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by liurongchan on 16/3/29.
+ * Created by liurongchan on 16/4/12.
  */
-public class CommentReplyActivity extends AppCompatActivity implements EmotionAdapter.OnEmotionSelectedListener {
-
-    String idstr;
-    String cid;
+public class PostWeiBoActivity extends AppCompatActivity implements EmotionAdapter.OnEmotionSelectedListener{
 
     ImageView emotion;
+    ImageView image;
     ImageView send;
     RelativeLayout send_and_emotion;
     EditText comment_text;
     GridView emotion_gridview;
-    CheckBox checkBox;
 
     List<String> emotion_names;
 
@@ -63,24 +58,20 @@ public class CommentReplyActivity extends AppCompatActivity implements EmotionAd
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.reply_comment_activity);
+        setContentView(R.layout.post_weibo_activity);
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle("评论微博");
+            actionBar.setTitle("发布微博");
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Intent intent = getIntent();
-        if (intent != null) {
-            idstr = intent.getStringExtra("id");
-            cid = intent.getStringExtra("cid");
-        }
         emotion = (ImageView) findViewById(R.id.emotion);
+        image = (ImageView) findViewById(R.id.image);
         send = (ImageView) findViewById(R.id.send);
         send_and_emotion = (RelativeLayout) findViewById(R.id.send_and_emotion);
         comment_text = (EditText) findViewById(R.id.comment_text);
         emotion_gridview = (GridView) findViewById(R.id.reply_comment_gridview);
-        checkBox = (CheckBox) findViewById(R.id.checkBox);
 
         loadEmotion();
 
@@ -88,8 +79,7 @@ public class CommentReplyActivity extends AppCompatActivity implements EmotionAd
             @Override
             public void onClick(View v) {
                 if (!isUp) {
-                    send_and_emotion.setTranslationY(0 - DensityUtils.dip2px(CommentReplyActivity.this, 200));
-                    checkBox.setTranslationY(0 - DensityUtils.dip2px(CommentReplyActivity.this, 200));
+                    send_and_emotion.setTranslationY(0 - DensityUtils.dip2px(PostWeiBoActivity.this, 200));
                     emotion_gridview.setVisibility(View.VISIBLE);
                     isUp = true;
                 }
@@ -101,7 +91,6 @@ public class CommentReplyActivity extends AppCompatActivity implements EmotionAd
             public void onClick(View v) {
                 if (isUp) {
                     send_and_emotion.setTranslationY(0);
-                    checkBox.setTranslationY(0);
                     emotion_gridview.setVisibility(View.GONE);
                     isUp = false;
                 }
@@ -148,15 +137,15 @@ public class CommentReplyActivity extends AppCompatActivity implements EmotionAd
             @Override
             protected void onPostExecute(List<String> list) {
                 super.onPostExecute(list);
-                EmotionAdapter emotionAdapter = new EmotionAdapter(CommentReplyActivity.this, properties, list);
+                EmotionAdapter emotionAdapter = new EmotionAdapter(PostWeiBoActivity.this, properties, list);
                 emotion_gridview.setAdapter(emotionAdapter);
-                emotionAdapter.setOnEmotionSeLectedListener(CommentReplyActivity.this);
+                emotionAdapter.setOnEmotionSeLectedListener(PostWeiBoActivity.this);
             }
         });
     }
 
     private void sendComment() {
-        progressDialog = ProgressDialog.show(this, "系统提示", "发送评论中...");
+        progressDialog = ProgressDialog.show(this, "系统提示", "发送微博中...");
         String content = comment_text.getText().toString();
         if (content.equals("")) {
             Snackbar.make(comment_text, "内容为空", Snackbar.LENGTH_LONG)
@@ -165,11 +154,10 @@ public class CommentReplyActivity extends AppCompatActivity implements EmotionAd
             Snackbar.make(comment_text, "字数多余140限制", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         } else {
-            int isRepost = checkBox.isChecked() == true ? 1 : 0;
-            RetrofitTool.getInstance().commentReply(AccessTokenKeeper.readAccessToken(this).getToken(), cid, idstr, content, isRepost)
+            RetrofitTool.getInstance().postWeiBo(AccessTokenKeeper.readAccessToken(this).getToken(), content)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<Comment>() {
+                    .subscribe(new Subscriber<Status>() {
                         @Override
                         public void onCompleted() {
                             progressDialog.dismiss();
@@ -181,12 +169,12 @@ public class CommentReplyActivity extends AppCompatActivity implements EmotionAd
                         public void onError(Throwable e) {
                             Log.e("commentActivity", "onError");
                             NotificationManager manager= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                            NotificationCompat.Builder builder=new NotificationCompat.Builder(CommentReplyActivity.this);
+                            NotificationCompat.Builder builder=new NotificationCompat.Builder(PostWeiBoActivity.this);
 
                             builder.setSmallIcon(R.mipmap.ic_launcher);
                             builder.setTicker("A new Message");
-                            builder.setContentTitle("发送评论");
-                            builder.setContentText("评论失败");
+                            builder.setContentTitle("发送微博");
+                            builder.setContentText("发送失败");
                             builder.setAutoCancel(true);
                             builder.setWhen(System.currentTimeMillis());
                             Notification notification=builder.build();//notify(int id,notification对象);id用来标示每个notification
@@ -194,15 +182,15 @@ public class CommentReplyActivity extends AppCompatActivity implements EmotionAd
                         }
 
                         @Override
-                        public void onNext(Comment comment) {
-                            if (comment != null) {
+                        public void onNext(Status status) {
+                            if (status != null) {
                                 NotificationManager manager= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                                NotificationCompat.Builder builder=new NotificationCompat.Builder(CommentReplyActivity.this);
+                                NotificationCompat.Builder builder=new NotificationCompat.Builder(PostWeiBoActivity.this);
 
                                 builder.setSmallIcon(R.mipmap.ic_launcher);
                                 builder.setTicker("A new Message");
-                                builder.setContentTitle("发送评论");
-                                builder.setContentText("评论成功");
+                                builder.setContentTitle("发送微博");
+                                builder.setContentText("发送成功");
                                 builder.setAutoCancel(true);
                                 builder.setWhen(System.currentTimeMillis());
                                 Notification notification=builder.build();//notify(int id,notification对象);id用来标示每个notification

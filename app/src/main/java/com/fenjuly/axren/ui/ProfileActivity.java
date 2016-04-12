@@ -1,24 +1,30 @@
 package com.fenjuly.axren.ui;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.fenjuly.axren.R;
 import com.fenjuly.axren.data.ImageCacheManager;
+import com.fenjuly.axren.model.Statuses;
 import com.fenjuly.axren.model.User;
 import com.fenjuly.axren.network.RetrofitTool;
+import com.fenjuly.axren.ui.adapter.TimeLineAdapter;
+import com.fenjuly.axren.ui.view.MyLinearLayoutManager;
 import com.fenjuly.axren.utils.AccessTokenKeeper;
 import com.fenjuly.axren.utils.DensityUtils;
 
@@ -44,9 +50,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     ProgressDialog progressDialog;
 
+    RecyclerView recyclerView;
+
+    Context mContext;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = this;
         setContentView(R.layout.profile_activity);
         Intent intent = getIntent();
         if (intent != null) {
@@ -67,6 +78,9 @@ public class ProfileActivity extends AppCompatActivity {
         post = (TextView) findViewById(R.id.post_text);
         description = (TextView) findViewById(R.id.description);
 
+        recyclerView = (RecyclerView) findViewById(R.id.my_weibo);
+        recyclerView.setLayoutManager(new MyLinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
+
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
@@ -81,10 +95,19 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         loadUserProfile();
+        loadMyWeiBos();
         fans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProfileActivity.this, FansActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        follow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, FocusActivity.class);
                 startActivity(intent);
             }
         });
@@ -98,7 +121,6 @@ public class ProfileActivity extends AppCompatActivity {
                 .subscribe(new Subscriber<User>() {
                     @Override
                     public void onCompleted() {
-                        progressDialog.dismiss();
                     }
 
                     @Override
@@ -119,6 +141,32 @@ public class ProfileActivity extends AppCompatActivity {
                             mDefaultImageDrawable = new ColorDrawable(ProfileActivity.this.getResources().getColor(R.color.colorPrimary));
                             ImageCacheManager.loadImage(user.getAvatar_large(), ImageCacheManager
                                     .getImageListener(imageView, mDefaultImageDrawable, mDefaultImageDrawable), 0, DensityUtils.dip2px(ProfileActivity.this, 40));
+                        }
+                    }
+                });
+    }
+
+    private void loadMyWeiBos() {
+        RetrofitTool.getInstance().getMyWeiBos(AccessTokenKeeper.readAccessToken(this).getToken(), id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Statuses>() {
+                    @Override
+                    public void onCompleted() {
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Statuses statuses) {
+                        if (statuses != null) {
+                            TimeLineAdapter timeLineAdapter = new TimeLineAdapter(statuses.getStatuses(), mContext);
+                            recyclerView.setAdapter(timeLineAdapter);
+                            Log.e("stastuses", statuses.getStatuses().toString());
                         }
                     }
                 });

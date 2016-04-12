@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.fenjuly.axren.ui.PostWeiBoActivity;
 import com.fenjuly.axren.ui.ProfileActivity;
 import com.fenjuly.axren.ui.fragment.PublicTimeLineFragment;
 import com.fenjuly.axren.utils.AccessTokenKeeper;
@@ -52,8 +53,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+               Intent intent = new Intent(MainActivity.this, PostWeiBoActivity.class);
+                startActivity(intent);
             }
         });
 
